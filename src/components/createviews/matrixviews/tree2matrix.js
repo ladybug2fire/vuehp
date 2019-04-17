@@ -29,25 +29,30 @@ export default {
     tree:{
       deep:true,
       handler: function(nv,ov){
-        if(nv.length)this.setMatrixs();
+        if(_.get(nv, 'target.length'))this.setMatrixs();
       }
     }
   },
   methods: {
     // 获取所有子数组
     genArray(node) {
-      if(!node)return [];
+      if(!node)return null;
       if (_.isEmpty(node.child)) {
         node.child = [...this.schemes];
-        return [node];
+        return {scheme: node};
       }
-      return [node].concat(...node.child.map(e => this.genArray(e)));
+      const children = node.child.map(e => this.genArray(e));
+      return ({
+        scheme: _.flatten([...children.map(e=>e.scheme).filter(e=>e)]),
+        target: _.flatten([node].concat(...children.map(e=>e.target).filter(e=>e)))
+      });
     },
     // 初始化多个矩阵
     setMatrixs() {
       let obj = {};
-      if(_.isEmpty(this.tree))return;
-      this.tree.forEach(e => {
+      if(!this.isValid())return;
+      const {scheme, target} = this.tree;
+      [...scheme, ...target].forEach(e => {
         obj[e.name] = this.genMatrix(e.child.length);
       });
       this.$set(this, "matrixs", obj);
@@ -118,15 +123,21 @@ export default {
         this.genThead(h, node),
         this.genTbody(h, node)
       ]);
+    },
+    isValid(){
+      // 包含评价方案和评价准则才合法
+      return _.isArray(_.get(this.tree, 'target')) && _.isArray(_.get(this.tree, 'scheme'))
     }
   },
   mounted() {
     this.setMatrixs();
   },
   render(h) {
-    if(_.isEmpty(this.tree))return null;
-    return h("div", { class: "table-container" }, [
-      this.tree.map(e => this.genTable(h, e))
+    if(!this.isValid())return null;
+    const {scheme, target} = this.tree;
+    return h("div",{style:{'padding': '20px'}},[
+      h('div', [h('h1',['评价指标']),h('div', {class:['target-section','table-container']},[target.map(e => this.genTable(h, e))])]),
+      h('div', [h('h1',['评价方案']),h('div', {class:['target-section','table-container']},[scheme.map(e => this.genTable(h, e))])])
     ]);
   }
 };
