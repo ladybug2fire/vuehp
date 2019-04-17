@@ -11,7 +11,7 @@
     </el-steps>
 
     <keep-alive>
-      <step1tree v-show="active === 0"></step1tree>
+      <step1tree v-show="active === 0" ref="step1"></step1tree>
     </keep-alive>
 
     <keep-alive>
@@ -64,7 +64,12 @@
         this.active--;
       },
       next(){
-        this.active++;
+        if(this.active === 0){
+          this.$refs.step1.storeData();
+        }
+        this.$nextTick(()=>{
+          this.active++;
+        })
       }
 
     }

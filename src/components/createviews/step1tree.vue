@@ -1,79 +1,58 @@
 <template>
   <div class="block">
-    <br/>
-    <el-tree
-      :data="data"
-      node-key="id"
-      default-expand-all
-      :expand-on-click-node="false"
-      :render-content="renderContent">
-    </el-tree>
+      <el-row>
+        <el-col :span="12" :offset="1">
+          <ly-tree ref="tree"></ly-tree>
+        </el-col>
+        <el-col :span="8" :offset="1">
+          <el-card class="box-card">
+            <div slot="header" class="clearfix">
+              <span>评价方案</span>
+            </div>
+            <div v-for="(o, i) in schemes" :key="i" class="text item">
+              <el-input v-model="o.name" size="mini"  class="custom-input" placeholder="请输入评价方案"></el-input><el-button size="mini"  @click="delItem(i)"  type="danger">删除</el-button>
+            </div>
+            <el-button @click="addItem" size="mini" type="primary">添加</el-button>
+          </el-card>
+        </el-col>
+      </el-row>
   </div>
 </template>
 
 <script>
+import _ from 'lodash'
   let id = 1000;
   export default {
     name: "step1tree",
     data() {
-      const data = [
-        {
-          id: 1,
-          label: '请输入评价目标',
-        },
-        {
-          id: 2,
-          label: '请输入评价准则',
-        },
-        {
-          id: 3,
-          label: '请输入评价方案',
-        }
-      ];
       return {
-        data: JSON.parse(JSON.stringify(data))
+        schemes: [{name:null}],
       }
     },
 
     methods: {
-      append(data) {
-        const newChild = { id: id++, label: 'testtest', children: [] };
-        if (!data.children) {
-          this.$set(data, 'children', []);
-        }
-        data.children.push(newChild);
+      addItem(){
+        this.schemes.push({name: null})
       },
-
-      remove(node, data) {
-        const parent = node.parent;
-        const children = parent.data.children || parent.data;
-        const index = children.findIndex(d => d.id === data.id);
-        children.splice(index, 1);
+      delItem(i){
+        this.$delete(this.schemes, i);
       },
-
-      renderContent(h, { node, data, store }) {
-        return (
-          <span class="custom-tree-node">
-          <span>{node.label}</span>
-          <span>
-          <el-button size="mini" type="text" on-click={ () => this.append(data) }>添加</el-button>
-          <el-button size="mini" type="text" on-click={ () => this.remove(node, data) }>删除</el-button>
-        </span>
-        </span>);
+      getData(){
+        return this.$refs.tree.getData();
+      },
+      storeData(){
+        this.$store.commit('setSchemes', _.cloneDeep(this.schemes));
+        this.$store.commit('setTreeData', _.cloneDeep(this.getData()));
       }
-
     }
   }
 </script>
 
 <style scoped>
-  .custom-tree-node {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 14px;
-    padding-right: 8px;
+  .custom-input{
+    width: 200px;
+    margin-right: 10px;
+    margin-bottom: 10px;
   }
 </style>
 
