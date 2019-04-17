@@ -1,5 +1,6 @@
 import "./index.less";
 import _ from 'lodash'
+import * as math from 'mathjs'
 export default {
   name: "tree2matrix",
   props: {
@@ -59,7 +60,8 @@ export default {
     },
     // 生成初始化矩阵
     genMatrix(num) {
-      return new Array(num).fill(1).map(() => new Array(num).fill(1));
+      // 加1行 total, 加3 列 U,V,W
+      return new Array(num+1).fill(1).map(() => new Array(num+3).fill(1));
     },
     // 判断分数
     isFraction(num) {
@@ -69,18 +71,47 @@ export default {
     genThead(h, node) {
       let heads = [node.name, ...node.child.map(e => e.name)];
       let th = heads.map(e => h("th", [e]));
-      return h("thead", [h("tr", [th])]);
+      let th_sub = ['U','V','W'].map(e=>h('th', [e, h('sub',['i'])]))
+      return h("thead", [h("tr", [th, th_sub])]);
+    },
+    calcMatrix(key){
+      const matrix = _.get(this.matrixs, key);
+      const size = math.size(matrix);
+      const row = size[0], col = size[1];
+      for(let i = 0; i < row -1; i++){
+        let sub = math.subset(matrix, math.index(i, math.range(0, col-3)))[0]
+        const U_i = sub.reduce((sum, e)=>math.multiply(sum, /\//g.test(e)?math.fraction(e):e),1)
+        //1. 计算Ui
+        this.$set(matrix[i], col - 3, math.number(U_i).toFixed(2));
+        // 2. 计算Vi
+        this.$set(matrix[i], col - 2, Math.pow(U_i, 1 / (col-3)).toFixed(2));
+      }
+      const v_i = math.subset(matrix, math.index(math.range(0, row-1), col-2));
+      const sum = v_i.reduce((sum,e)=>math.add(sum, e),0);
+      for(let j = 0; j < row-1;j++){
+        // 计算wi
+        this.$set(matrix[j], col - 1, (v_i[j]/sum).toFixed(2)); 
+      }
+      // 计算每列的和
+      for(let k = 0; k < col;k++){
+        let sub_col_i = _.flatten(math.subset(matrix, math.index(math.range(0, row-1),k)));
+        let sum_col = sub_col_i.reduce((sum, e)=>math.add(sum, /\//g.test(e)?math.fraction(e):e),0);
+        console.log(sub_col_i, sum_col)
+        this.$set(matrix[row-1], k, math.number(sum_col).toFixed(2))
+      }
     },
     // 表身
     genTbody(h, node) {
       const matrix = this.matrixs[node.name];
       if (!matrix) return null;
+      const dimension = _.get(node, 'child.length');//指标维度
       let row = matrix.map((e, i) =>
         h("tr", [
-          h("td", node.child[i].name),
+          h("td", _.get(node,`child.${i}.name`, '∑')),
           e.map((e, j) =>
             h("td", [
-              j !== i
+              // 小于指标维度才做处理
+              j !== i && i < dimension && j <dimension
                 ? h(
                     "select",
                     {
@@ -93,15 +124,17 @@ export default {
                       on: {
                         input: v => {
                           const data = v.target.value;
-                          console.log(v);
                           this.$set(matrix[i], [j], data);
                           if (data) {
                             if (this.isFraction(data)) {
                               this.$set(matrix[j], i, data.split("/")[1]);
                             } else {
-                              this.$set(matrix[j], i, `1/${data}`);
+                              this.$set(matrix[j], i, data==1? 1 : `1/${data}`);
                             }
                           }
+                          this.$nextTick(()=>{
+                            this.calcMatrix(node.name);
+                          })
                         }
                       }
                     },
@@ -131,6 +164,9 @@ export default {
   },
   mounted() {
     this.setMatrixs();
+    _.forIn(this.matrixs,(v,k)=>{
+      this.calcMatrix(k);
+    })
   },
   render(h) {
     if(!this.isValid())return null;
