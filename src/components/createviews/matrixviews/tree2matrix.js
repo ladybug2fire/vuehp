@@ -192,8 +192,8 @@ export default {
         flatten_BW.reduce((sum, e, i) => (sum += e / flatten_W[i]), 0)
       ).toFixed(3);
       const CI = ((lambda - n) / (n - 1)).toFixed(3);
-      const RI = R_I[n - 1];
-      const CR = RI ? (CI / RI).toFixed(3) : "-";
+      const RI = R_I[n - 1].toFixed(2);
+      const CR = RI > 0 ? (CI / RI).toFixed(3) : "-";
       this.isPassive = RI ? CR <= 0.1 && this.isPassive : this.isPassive;
       this.$set(this.calResult, key, {
         lambda,

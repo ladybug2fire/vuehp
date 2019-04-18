@@ -1,10 +1,9 @@
 <template>
     <div class="matrix-info">
-        <div><span>n:</span><span>{{n}}</span></div>
         <div><span>&lambda;<sub>max</sub>:</span><span>{{lambda}}</span></div>
         <div><span>CI:</span><span>{{CI}}</span></div>
-        <div><span>CR:</span><span>{{(CR)}}</span></div>
         <div><span>RI:</span><span>{{RI}}</span></div>
+        <div><span>CR:</span><span>{{(CR)}}</span></div>
         <div v-if="CR <= 0.1 || CR == '-'">
             <el-alert
                 :closable="false"
