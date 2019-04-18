@@ -48,7 +48,7 @@
     },
     data(){
       return {
-        active: 0,
+        active: 1,
         stepData:[
           {title: '第一步',description: '建立递阶层次结构'},
           {title: '第二步',description: '构造判断矩阵并赋值及层次单排序与检验'},
