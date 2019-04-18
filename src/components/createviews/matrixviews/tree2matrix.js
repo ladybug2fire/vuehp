@@ -1,7 +1,7 @@
 import "./index.less";
 import _ from "lodash";
 import * as math from "mathjs";
-import MatrixInfo from './matrixInfo'
+import MatrixInfo from "./matrixInfo";
 // 平均随机一致性指标R.I.表（1000次正互反矩阵计算结果） 1-15
 const R_I = [
   0,
@@ -25,14 +25,14 @@ export default {
   props: {
     msg: String
   },
-  components:{
-    MatrixInfo,
+  components: {
+    MatrixInfo
   },
   data() {
     return {
       matrixs: {},
       calResult: {},
-      isPassive: true,
+      isPassive: true
     };
   },
   computed: {
@@ -178,15 +178,22 @@ export default {
       const flatten_W = _.flatten(vectorW);
       const flatten_BW = _.flatten(BW);
       const n = flatten_W.length; // 向量维度
-      if(n > 15){this.$message.error('维度太高不支持');return;}
-      if (n != flatten_BW.length) {this.$message.error('维度不一致');return;}; // 维度不一致
+      if (n > 15) {
+        this.$message.error("维度太高不支持");
+        return;
+      }
+      if (n != flatten_BW.length) {
+        this.$message.error("维度不一致");
+        return;
+      } // 维度不一致
       // 计算得到lambda
-      const lambda =(
+      const lambda = (
         (1 / n) *
-        flatten_BW.reduce((sum, e, i) => (sum += e / flatten_W[i]), 0)).toFixed(3);
-      const CI = ((lambda - n)/(n - 1)).toFixed(3);
+        flatten_BW.reduce((sum, e, i) => (sum += e / flatten_W[i]), 0)
+      ).toFixed(3);
+      const CI = ((lambda - n) / (n - 1)).toFixed(3);
       const RI = R_I[n - 1];
-      const CR = RI ? (CI / RI).toFixed(3) : '-'
+      const CR = RI ? (CI / RI).toFixed(3) : "-";
       this.isPassive = RI ? CR <= 0.1 && this.isPassive : this.isPassive;
       this.$set(this.calResult, key, {
         lambda,
@@ -194,7 +201,7 @@ export default {
         CI,
         CR,
         RI
-      })
+      });
     },
     // 表身
     genTbody(h, node) {
@@ -248,13 +255,12 @@ export default {
       return h("tbody", [row]);
     },
     genTable(h, node) {
-      return h('div', 
-      [
+      return h("div", [
         h("table", { class: "gridtable" }, [
-            this.genThead(h, node),
-            this.genTbody(h, node)
+          this.genThead(h, node),
+          this.genTbody(h, node)
         ]),
-        h('matrix-info',{props:this.calResult[node.name]})
+        h("matrix-info", { props: this.calResult[node.name] })
       ]);
     },
     isValid() {
@@ -264,8 +270,8 @@ export default {
         _.isArray(_.get(this.tree, "scheme"))
       );
     },
-    getPassive(){
-      return this.isPassive;// 获取是否全部通过
+    getPassive() {
+      return this.isPassive; // 获取是否全部通过
     }
   },
   mounted() {
