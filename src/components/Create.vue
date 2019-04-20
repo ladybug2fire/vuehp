@@ -10,9 +10,7 @@
       ></el-step>
     </el-steps>
 
-    <keep-alive>
-      <step1tree v-show="active === 0" ref="step1"></step1tree>
-    </keep-alive>
+    <step1tree v-show="active === 0" ref="step1"></step1tree>
 
     <step2matrix v-if="active === 1"></step2matrix>
 
@@ -58,6 +56,14 @@ export default {
       nextName: "下一步"
     };
   },
+  computed:{
+    schemes(){
+      return this.$store.getters.schemes;
+    },
+    treeData(){
+      return this.$store.getters.treeData;
+    }
+  },
   methods: {
     last() {
       this.active--;
@@ -66,9 +72,19 @@ export default {
       if (this.active === 0) {
         this.$refs.step1.storeData();
       }
-      this.$nextTick(() => {
-        this.active++;
-      });
+      this.$nextTick(()=>{
+        if(this.schemes.length < 2){
+          this.$message.error('方案大于1条才能评估')
+          return;
+        }
+        if(this.treeData.child.length < 2){
+          this.$message.error('评价准则需要大于1条')
+          return;
+        }
+        this.$nextTick(() => {
+          this.active++;
+        });
+      })
     },
     submit(){
       this.$notify.success('提交成功')

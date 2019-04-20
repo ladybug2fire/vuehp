@@ -13,7 +13,7 @@
         <tbody>
           <tr>
             <td></td>
-            <td v-for="(w, i) in WA" :key="i">{{w}}</td>
+            <td v-for="(w, i) in WA" :key="i">{{w.toFixed(3)}}</td>
             <td></td>
           </tr>
           <tr v-for="(name, i) in rowname" :key="i">

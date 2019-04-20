@@ -26,10 +26,7 @@ export default {
   methods: {
     // 初始化多个矩阵
     setMatrixs() {
-      if(_.isEmpty(_.keys(this.$store.getters.matrixs))){
-        // 空的时候才初始化
         this.$store.commit('setMatrixs')
-      }
     },
   },
   created() {

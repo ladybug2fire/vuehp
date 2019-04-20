@@ -9,7 +9,7 @@
             <div slot="header" class="clearfix">
               <span>评价方案</span>
             </div>
-            <div v-for="(o, i) in schemes" :key="i" class="text item">
+            <div v-for="(o, i) in schemeItems" :key="i" class="text item">
               <el-input v-model="o.name" size="mini"  class="custom-input" placeholder="请输入评价方案"></el-input><el-button size="mini"  @click="delItem(i)"  type="danger">删除</el-button>
             </div>
             <el-button @click="addItem" size="mini" type="primary">添加</el-button>
@@ -27,22 +27,21 @@ import shortid from 'shortid'
     name: "step1tree",
     data() {
       return {
-        schemes: [{name:null, id:shortid.generate()}],
+        schemeItems: [{name:null, id:shortid.generate()}],
       }
     },
-
     methods: {
       addItem(){
-        this.schemes.push({name: null, id:shortid.generate()})
+        this.schemeItems.push({name: null, id:shortid.generate()})
       },
       delItem(i){
-        this.$delete(this.schemes, i);
+        this.$delete(this.schemeItems, i);
       },
       getData(){
         return this.$refs.tree.getData();
       },
       storeData(){
-        this.$store.commit('setSchemes', _.cloneDeep(this.schemes));
+        this.$store.commit('setSchemes', _.cloneDeep(this.schemeItems.filter(e=>e.name)));
         this.$store.commit('setTreeData', _.cloneDeep(this.getData()));
       }
     }
