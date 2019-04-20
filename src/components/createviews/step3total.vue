@@ -14,7 +14,7 @@
           <tr v-for="(name,i) in thead" :key="i">
             <td>{{name}}</td>
             <td>{{WP[i]}}</td>
-            <td>{{WA[i]}}</td>
+            <td>{{WA[i].toFixed(3)}}</td>
           </tr>
         </tbody>
       </table>
