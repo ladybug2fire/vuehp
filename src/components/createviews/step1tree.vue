@@ -21,18 +21,19 @@
 
 <script>
 import _ from 'lodash'
+import shortid from 'shortid'
   let id = 1000;
   export default {
     name: "step1tree",
     data() {
       return {
-        schemes: [{name:null}],
+        schemes: [{name:null, id:shortid.generate()}],
       }
     },
 
     methods: {
       addItem(){
-        this.schemes.push({name: null})
+        this.schemes.push({name: null, id:shortid.generate()})
       },
       delItem(i){
         this.$delete(this.schemes, i);

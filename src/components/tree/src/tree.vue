@@ -49,6 +49,7 @@
     getDefaultContent
   } from './tree.utils.js'
   import './tree.scss'
+  import shortid from 'shortid'
 
   export default {
     name: 'ly-tree',
@@ -80,7 +81,7 @@
       refresh() {
         // let res = getServiceTree()
         // this.is_superuser = res.is_superuser
-        let id = 1;
+        let id = shortid.generate();
         this.treeData = [{
           id,
           name: '请输入评价目标',

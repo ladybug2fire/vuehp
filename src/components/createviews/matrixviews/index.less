@@ -3,21 +3,30 @@ table.gridtable {
     font-size: 11px;
     color: #333333;
     border-width: 1px;
-    border-color: #666666;
+    border-color: #DCDFE6;
     border-collapse: collapse;
   }
   table.gridtable th {
     border-width: 1px;
     padding: 8px;
     border-style: solid;
-    border-color: #666666;
-    background-color: #dedede;
+    border-color: #DCDFE6;
+    background-color: #F2F6FC;
+    &:first-of-type{
+      background: #67C23A;
+    }
   }
   table.gridtable td {
+    &:first-of-type{
+      border-style: solid;
+      font-weight: bold;
+      border-color: #DCDFE6;
+      background-color: #F2F6FC; 
+    }
     border-width: 1px;
     padding: 8px;
     border-style: solid;
-    border-color: #666666;
+    border-color: #DCDFE6;
     background-color: #ffffff;
   }
   .table-container {
@@ -28,4 +37,7 @@ table.gridtable {
       margin: 10px;
     }
   }
-  
+  .chart{
+    width: 60vw;
+    margin-top: 30px;
+  }

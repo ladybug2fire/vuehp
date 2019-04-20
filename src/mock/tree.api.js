@@ -1,4 +1,4 @@
-let id = 1000
+import shortid from 'shortid'
 
 export let data = [
   {
@@ -55,7 +55,7 @@ export let addItem = (data, payload) => {
   for(let i = 0; i < data.length; i++) {
     if (data[i].id === payload.id) {
       addObj = {
-        id: id++,
+        id: shortid.generate(),
         name: payload.name,
         level: data[i].level + 1,
         child: []
