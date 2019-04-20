@@ -66,6 +66,7 @@ export default {
   },
   methods: {
     last() {
+      this.$store.commit('setPreIndex', this.active)
       this.active--;
     },
     next() {
@@ -82,6 +83,7 @@ export default {
           return;
         }
         this.$nextTick(() => {
+          this.$store.commit('setPreIndex', this.active)
           this.active++;
         });
       })

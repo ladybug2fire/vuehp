@@ -26,7 +26,9 @@ export default {
   methods: {
     // 初始化多个矩阵
     setMatrixs() {
+      if(this.$store.state.preIndex < 1){
         this.$store.commit('setMatrixs')
+      }
     },
   },
   created() {

@@ -17,9 +17,13 @@ export default new Vuex.Store({
       WD: [],//方案评估矩阵
       WA: [],//总排序权重
       WP: [],//单排序权重
+      preIndex: 0,
     }
   },
   mutations:{
+    setPreIndex(state,payload){
+      state.preIndex = payload
+    },
     setWD(state,payload){
       state.WD = payload
     },
