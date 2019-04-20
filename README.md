@@ -22,3 +22,4 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 
 tree 渲染前先请求数据，根据路由参数，
 完成的时候进行保存，根据是否编辑状态切换编辑状态
+偏好信息问题？

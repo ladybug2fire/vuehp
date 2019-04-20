@@ -44,6 +44,15 @@ import shortid from 'shortid'
         this.$store.commit('setSchemes', _.cloneDeep(this.schemeItems.filter(e=>e.name)));
         this.$store.commit('setTreeData', _.cloneDeep(this.getData()));
       }
+    },
+    mounted(){
+      const loading = this.$loading()
+      console.log(this.$store.dispatch('getData').then((res)=>{
+        this.$set(this, 'schemeItems', res)
+        setTimeout(() => {
+          loading.close();
+        }, 1500);
+      }));
     }
   }
 </script>

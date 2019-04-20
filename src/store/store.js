@@ -20,6 +20,14 @@ export default new Vuex.Store({
       preIndex: 0,
     }
   },
+  actions:{
+    getData({state},payload){
+      return [{"name":"杭州","id":"GQzWA4iqo"},{"name":"上海","id":"Z8idMS6y2"}];
+    },
+    getTree({state}, payload){
+      return [{"id":"9Am94BjpJ","name":"旅游","level":1,"child":[{"id":"Bz749WrQN","name":"饮食","level":2,"child":[]},{"id":"_PKbWECha","name":"交通","level":2,"child":[{"id":"eB_NwY706","name":"国道","level":3,"child":[]},{"id":"7fB44Mhq8","name":"高速","level":3,"child":[]}]},{"id":"bJsMH3wo1","name":"费用","level":2,"child":[]}]}]; 
+    }
+  },
   mutations:{
     setPreIndex(state,payload){
       state.preIndex = payload
