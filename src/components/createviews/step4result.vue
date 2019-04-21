@@ -5,9 +5,9 @@
       <table class="gridtable">
         <thead>
           <tr>
-            <th></th>
+            <th>方案</th>
             <th v-for="(name,i) in thead" :key="i">{{name}}</th>
-            <th></th>
+            <th>w<sub>i</sub></th>
           </tr>
         </thead>
         <tbody>
