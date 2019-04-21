@@ -23,17 +23,6 @@ export default {
       return this.$store.getters.tree;
     },
   },
-  methods: {
-    // 初始化多个矩阵
-    setMatrixs() {
-      if(this.$store.state.preIndex < 1){
-        this.$store.commit('setMatrixs')
-      }
-    },
-  },
-  created() {
-    this.setMatrixs();
-  },
   render(h) {
     if (!isValid(this.tree)) return null;
     const { scheme, target } = this.tree;

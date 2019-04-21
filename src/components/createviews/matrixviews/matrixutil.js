@@ -5,7 +5,7 @@ export function genArray(node, schemes) {
   if (!node) return null;
   const tempNode = _.cloneDeep(node);
   if (_.isEmpty(node.child)) {
-    tempNode.child = _.map(schemes, e=>_.assign(e, {level: node.level+1}));
+    tempNode.child = _.map(schemes, e=>_.assign({}, {...e, level: node.level+1}));
     return { scheme: tempNode };
   }
   const children = node.child.map(e => genArray(e, schemes));
