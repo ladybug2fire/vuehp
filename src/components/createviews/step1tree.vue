@@ -52,12 +52,12 @@ import shortid from 'shortid'
     },
     mounted(){
       const loading = this.$loading()
-      console.log(this.$store.dispatch('getData').then((res)=>{
+      this.$store.dispatch('getData').then((res)=>{
         this.$set(this, 'schemeItems', res)
         setTimeout(() => {
           loading.close();
         }, 1500);
-      }));
+      });
     }
   }
 </script>
