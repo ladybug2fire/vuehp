@@ -71,9 +71,11 @@
     },
 
     created () {
-      this.refresh()
       this.$store.dispatch('getTree').then(res=>{
         this.$set(this, 'treeData', res)
+        if(_.isEmpty(res)){
+          this.refresh()
+        }
       })
     },
 

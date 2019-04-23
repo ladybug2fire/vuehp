@@ -31,6 +31,7 @@ import step1tree from "./createviews/step1tree";
 import step2matrix from "./createviews/step2matrix";
 import step3total from "./createviews/step3total";
 import step4result from "./createviews/step4result";
+import { getData, addData } from "@/api.js";
 
 export default {
   name: "Create",
@@ -56,40 +57,61 @@ export default {
       nextName: "下一步"
     };
   },
-  computed:{
-    schemes(){
+  computed: {
+    schemes() {
       return this.$store.getters.schemes;
     },
-    treeData(){
+    treeData() {
       return this.$store.getters.treeData;
     }
   },
   methods: {
     last() {
-      this.$store.commit('setPreIndex', this.active)
+      this.$store.commit("setPreIndex", this.active);
       this.active--;
     },
     next() {
       if (this.active === 0) {
         this.$refs.step1.storeData();
       }
-      this.$nextTick(()=>{
-        if(this.schemes.length < 2){
-          this.$message.error('方案大于1条才能评估')
+      this.$nextTick(() => {
+        if (this.schemes.length < 2) {
+          this.$message.error("方案大于1条才能评估");
           return;
         }
-        if(this.treeData.child.length < 2){
-          this.$message.error('评价准则需要大于1条')
+        if (this.treeData.child.length < 2) {
+          this.$message.error("评价准则需要大于1条");
           return;
         }
         this.$nextTick(() => {
-          this.$store.commit('setPreIndex', this.active)
+          this.$store.commit("setPreIndex", this.active);
           this.active++;
         });
-      })
+      });
     },
-    submit(){
-      this.$notify.success('提交成功')
+    submit() {
+      const cloneMatrix = _.cloneDeep(this.$store.getters.matrixs); // math.matrix 对象json化不能解码
+      let newCloneArray = {};
+      _.forIn(cloneMatrix, (e, k) => {
+        _.set(newCloneArray, k, e.toArray());
+      });
+      addData({
+        modelid: this.$store.getters.rootid,
+        name: this.treeData.name,
+        matrix: JSON.stringify(newCloneArray),
+        scheme: JSON.stringify(this.$store.getters.schemes),
+        treeData: JSON.stringify(this.$store.state.treeData)
+      }).then(res => {
+        const data = res.data;
+        if (data.code === 200) {
+          this.$notify.success("保存成功");
+          setTimeout(() => {
+            this.$router.replace("history");
+          }, 1400);
+        } else {
+          this.$notify.error(data.msg);
+        }
+      });
     }
   }
 };

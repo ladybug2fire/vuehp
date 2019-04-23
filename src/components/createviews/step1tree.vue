@@ -44,19 +44,14 @@ import shortid from 'shortid'
         if(_.isEqual(this.$store.getters.schemes, _.cloneDeep(this.schemeItems)) && 
           _.isEqual(this.$store.state.treeData, _.cloneDeep(this.getData()))
         )return;
-        debugger
         this.$store.commit('setSchemes', _.cloneDeep(this.schemeItems.filter(e=>e.name)));
         this.$store.commit('setTreeData', _.cloneDeep(this.getData()));
         this.$store.commit('setMatrixs')
       }
     },
     mounted(){
-      const loading = this.$loading()
       this.$store.dispatch('getData').then((res)=>{
         this.$set(this, 'schemeItems', res)
-        setTimeout(() => {
-          loading.close();
-        }, 1500);
       });
     }
   }
