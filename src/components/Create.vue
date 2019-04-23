@@ -72,6 +72,7 @@ export default {
     },
     next() {
       if (this.active === 0) {
+        // NOTE: 3 手动触发第一步的结果保存
         this.$refs.step1.storeData();
       }
       this.$nextTick(() => {
@@ -90,11 +91,13 @@ export default {
       });
     },
     submit() {
+      // NOTE: 深度克隆，免得 matrix 对象转 array 过程修改到原对象
       const cloneMatrix = _.cloneDeep(this.$store.getters.matrixs); // math.matrix 对象json化不能解码
       let newCloneArray = {};
       _.forIn(cloneMatrix, (e, k) => {
-        _.set(newCloneArray, k, e.toArray());
+        _.set(newCloneArray, k, e.toArray()); // 转 Array 方便后端存储
       });
+      // NOTE: 保存到后端，数据都进行JSON 转换
       addData({
         modelid: this.$store.getters.rootid,
         name: this.treeData.name,
@@ -105,6 +108,7 @@ export default {
         const data = res.data;
         if (data.code === 200) {
           this.$notify.success("保存成功");
+          // NOTE: 保存成功跳转到历史页面
           setTimeout(() => {
             this.$router.replace("history");
           }, 1400);

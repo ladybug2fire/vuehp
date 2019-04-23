@@ -41,6 +41,9 @@ export default {
                       },
                       on: {
                         input: v => {
+                          /**
+                           * NOTE: 这里主要是下拉选择选项变更时，修改表格对应位置的值，并更新表格
+                           */
                           const data = math.fraction(v.target.value);
                           let matrix = _.cloneDeep(_.get(this.matrixs, node.id));
                           matrix.subset(math.index(i, j), data)
@@ -148,9 +151,11 @@ export default {
       const RI = R_I[n - 1].toFixed(2);
       const CR = RI > 0 ? (CI / RI).toFixed(3) : "-";
       this.isPassive = RI ? CR <= 0.1 && this.isPassive : this.isPassive;
+      // NOTE: 保存修改后的表格
       this.$store.commit('setMatrix', {
         key, matrix
       })
+      // NOTE: 保存计算结果
       this.$store.commit("setCalResult", {
         key,
         value: {
@@ -164,6 +169,7 @@ export default {
     }
   },
   mounted() {
+    // NOTE: 表格初始化后计算一下各个指标
     this.table.map(e => {
         return this.calcMatrix(e.id)
     }) 

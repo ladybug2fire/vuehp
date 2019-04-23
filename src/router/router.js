@@ -29,7 +29,7 @@ export default new Router({
               getData({params:{
                 id: routeTo.query.id
               }}).then(res=>{
-                // 进页面前先获取数据，避免生命周期的问题
+                // NOTE: 1.进页面前先获取数据，避免生命周期的问题
                 const treeData = _.get(res, 'data.data.treeData.data');
                 const matrix = _.get(res, 'data.data.matrix.data');
                 const scheme = _.get(res, 'data.data.scheme.data');
@@ -39,6 +39,7 @@ export default new Router({
                 next();
               })
             }else{
+              // NOTE: 2.没有ID便是新建，需要清空
               store.commit('initial')
               next();
             }

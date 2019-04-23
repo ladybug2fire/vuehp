@@ -17,7 +17,7 @@ export default new Vuex.Store({
       WD: [],//方案评估矩阵
       WA: [],//总排序权重
       WP: [],//单排序权重
-      preIndex: 0,
+      preIndex: 0,// 好像没用了
     }
   },
   actions:{
@@ -55,10 +55,12 @@ export default new Vuex.Store({
     },
     setMatrixs(state,payload) {
       if(payload){
+        // NOTE: 这是查看的情况
         let obj = {};
         _.forIn(payload, (e,k)=>{
           _.set(obj, k, math.matrix(e).map(v=>{
             if(typeof v === 'object'){
+              // NOTE: 解析JSON时，fraction对象未能正常解析，需要手动构造
               return math.fraction(v.n, v.d)
             }else{
               return v
@@ -67,6 +69,7 @@ export default new Vuex.Store({
         })
         state.matrixs = obj;
       }else{
+        // NOTE: 这是新建的情况，直接新建单位矩阵填充矩阵
         let obj = {};
         let maps = tree2map(state.treeData);
         _.each(maps, e=>{
@@ -84,6 +87,7 @@ export default new Vuex.Store({
       state.calResult[payload.key] = payload.value
     },
     setMatrix(state,payload){
+      // NOTE: 对应每个表的计算过程中修改表中值。整个表格数据替换才能触发Vue页面更新
       const {key, matrix} = payload;
       _.set(state.matrixs, key, matrix)
       state.matrixs = _.assign({}, state.matrixs)
@@ -104,6 +108,7 @@ export default new Vuex.Store({
     tree2map(state){
       return tree2map(state.treeData);
     },
+    // 根节点ID
     rootid(state){
       return _.get(state.treeData,'0.id')
     },

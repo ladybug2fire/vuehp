@@ -2,6 +2,7 @@ import _ from 'lodash'
 import * as math from 'mathjs'
 
 export function genArray(node, schemes) {
+  // NOTE: 求解所有子表结构
   if (!node) return null;
   const tempNode = _.cloneDeep(node);
   if (_.isEmpty(node.child)) {
@@ -18,7 +19,7 @@ export function genArray(node, schemes) {
 }
 
 export function isValid(tree) {
-    // 包含评价方案和评价准则才合法
+    // NOTE: 包含评价方案和评价准则才合法
     return (
       _.isArray(_.get(tree, "target")) &&
       _.isArray(_.get(tree, "scheme"))
@@ -26,6 +27,7 @@ export function isValid(tree) {
 }
 
 export function genOptions() {
+  // NOTE: 生成下拉选项，转成了fraction对象方便计算
     const num = 9;
     const range = new Array(num).fill(0).map((e, i) =>({label: i+1, value: i+1}));
     const fractionRange = range.slice(1).map(e => ({label: `1/${e.value}`, value: math.fraction(`1/${e.value}`)}));
@@ -40,6 +42,7 @@ export function genThead(h, node) {
 }
 
 export function tree2map(tree, parentId=null){
+  // NOTE: 将树形结构平铺成列表结构方便查询
     let result = {};
     _.map(tree, (e)=>{
         _.set(result, e.id ,(_.assign(_.pick(e, ['level','id','name']),{
@@ -53,7 +56,7 @@ export function tree2map(tree, parentId=null){
     return result;
 }
 
-// 平均随机一致性指标R.I.表（1000次正互反矩阵计算结果） 1-15
+// NOTE: 平均随机一致性指标R.I.表（1000次正互反矩阵计算结果） 1-15
 export const R_I = [
     0,
     0,

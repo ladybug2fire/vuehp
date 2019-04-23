@@ -51,6 +51,7 @@ export default {
     }
   },
   mounted() {
+    // NOTE: 请求获取列表
     getData().then(res=>{
       this.$set(this, 'activities', _.get(res, 'data.data'))
     })

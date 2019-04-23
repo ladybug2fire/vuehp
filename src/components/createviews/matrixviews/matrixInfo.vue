@@ -22,6 +22,9 @@
 </template>
 
 <script>
+/**
+ * 主要用于辅助信息的展示
+ */
     export default {
         props:['CI','CR','n','lambda','RI']
     }

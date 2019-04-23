@@ -71,6 +71,7 @@
     },
 
     created () {
+      // NOTE: 组件创建时获取一下store中数据，没有值就初始化一个默认值根结点
       this.$store.dispatch('getTree').then(res=>{
         this.$set(this, 'treeData', res)
         if(_.isEmpty(res)){
