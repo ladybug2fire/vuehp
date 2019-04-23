@@ -29,6 +29,12 @@ export default new Vuex.Store({
     }
   },
   mutations:{
+    // 初始化清空 treeData等等 
+    initial(state){
+      state.schemes = []
+      state.treeData = []
+      state.matrixs = {}
+    },
     setPreIndex(state,payload){
       state.preIndex = payload
     },

@@ -39,6 +39,7 @@ export default new Router({
                 next();
               })
             }else{
+              store.commit('initial')
               next();
             }
           },
