@@ -43,7 +43,7 @@
     delItem,
     addItem,
     updateItem
-  } from '../../../mock/tree.api.js'
+  } from './tree.api.js'
   import {
     getEditContent,
     getDefaultContent
