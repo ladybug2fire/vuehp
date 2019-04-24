@@ -17,7 +17,6 @@
           placement="top"
         >
           <el-card @click.native="test(activity)" shadow="hover" :style="{width:'800px'}">
-            <!-- <p>{{activity.modelid}}</p> -->
             <h4>{{activity.name}}</h4>
           </el-card>
         </el-timeline-item>

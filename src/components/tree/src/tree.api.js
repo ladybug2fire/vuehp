@@ -1,32 +1,6 @@
 import shortid from 'shortid'
 
 export let data = [
-  {
-    "id": 1,
-    "name": "技术部",
-    "level": 1,
-    "child": [
-      {
-        "id": 2,
-        "name": "运维组",
-        "level": 2,
-        "child": [
-          {
-            "id": 3,
-            "name": "godo",
-            "level": 3,
-            "child": []
-          }
-        ]
-      },
-      {
-        "id": 4,
-        "name": "测试组",
-        "level": 2,
-        "child": []
-      }
-    ]
-  }
 ]
 
 export let getServiceTree = () => {
