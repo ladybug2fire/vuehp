@@ -7,3 +7,7 @@ export const addData = function(params) {
 export const getData = function(params) {
   return axios.get(`${HOST}/api/get`, params);
 };
+
+export const delData = function(params) {
+  return axios.get(`${HOST}/api/del`, params);
+};

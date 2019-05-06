@@ -20,8 +20,8 @@
 
     <center>
       <el-button style="margin-top: 12px;" @click="last" v-show="active > 0">{{lastName}}</el-button>
-      <el-button style="margin-top: 12px;" @click="next" v-show="active < 3">{{nextName}}</el-button>
-      <el-button style="margin-top: 12px;" type="success" @click="submit" v-show="active == 3">完成</el-button>
+      <el-button style="margin-top: 12px;" @click="next" v-show="active < 3" :disabled="!isPass && active == 1">{{nextName}}</el-button>
+      <el-button style="margin-top: 12px;" type="success" @click="submit" v-show="active == 3">保存</el-button>
     </center>
   </div>
 </template>
@@ -32,6 +32,7 @@ import step2matrix from "./createviews/step2matrix";
 import step3total from "./createviews/step3total";
 import step4result from "./createviews/step4result";
 import { getData, addData } from "@/api.js";
+import _ from 'lodash'
 
 export default {
   name: "Create",
@@ -54,10 +55,26 @@ export default {
         { title: "第四步", description: "评价方案结果分析" }
       ],
       lastName: "上一步",
-      nextName: "下一步"
+      nextName: "下一步",
+      isPass: true,
     };
   },
+  watch:{
+    calResult:{
+      deep: true,
+      handler(nv , ov){
+        let pass = true;
+        _.forIn(nv, e=>{
+          pass = pass && (e.CR <= 0.1 || e.CR == '-')
+        })
+        this.$set(this, 'isPass', pass)
+      }
+    }
+  },
   computed: {
+    calResult(){
+      return this.$store.getters.calResult
+    },
     schemes() {
       return this.$store.getters.schemes;
     },
@@ -75,17 +92,17 @@ export default {
         this.$refs.step1.storeData();
       }
       this.$nextTick(() => {
-        if (this.schemes.length < 2) {
-          this.$message.error("方案大于1条才能评估");
-          return;
-        }
-        if (this.treeData.child.length < 2) {
-          this.$message.error("评价准则需要大于1条");
-          return;
-        }
-        this.$nextTick(() => {
-          this.active++;
-        });
+          if (this.schemes.length < 2) {
+            this.$message.error("方案大于1条才能评估");
+            return;
+          }
+          if (this.treeData.child.length < 2) {
+            this.$message.error("评价准则需要大于1条");
+            return;
+          }
+          this.$nextTick(() => {
+            this.active++;
+          });
       });
     },
     submit() {

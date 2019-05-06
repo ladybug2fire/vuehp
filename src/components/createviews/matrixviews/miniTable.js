@@ -15,6 +15,9 @@ export default {
     },
     calResult() {
       return this.$store.state.calResult;
+    },
+    isPass(){
+      return this.$store.getters.isPass;
     }
   },
   methods: {
@@ -150,7 +153,6 @@ export default {
       const CI = ((lambda - n) / (n - 1)).toFixed(3);
       const RI = R_I[n - 1].toFixed(2);
       const CR = RI > 0 ? (CI / RI).toFixed(3) : "-";
-      this.isPassive = RI ? CR <= 0.1 && this.isPassive : this.isPassive;
       // NOTE: 保存修改后的表格
       this.$store.commit('setMatrix', {
         key, matrix

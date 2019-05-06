@@ -18,6 +18,9 @@
         >
           <el-card @click.native="test(activity)" shadow="hover" :style="{width:'800px'}">
             <h4>{{activity.name}}</h4>
+            <el-button size="mini" @click.stop="delData(activity)">
+              删除
+            </el-button>
           </el-card>
         </el-timeline-item>
       </el-timeline>
@@ -26,7 +29,7 @@
 </template>
 
 <script>
-import { getData } from "@/api.js";
+import { getData, delData } from "@/api.js";
 import _ from 'lodash'
 export default {
   name: "History",
@@ -47,13 +50,30 @@ export default {
           id: idx
         }
       })
+    },
+    delData(activity){
+      delData({
+        params:{
+          id: activity.modelid
+        }
+      }).then(res=>{
+        if(_.get(res,'data.code')==200){
+          this.$message.success('删除成功')
+          this.getData();
+        }else{
+          this.$message.error('删除失败') 
+        }
+      })
+    },
+    getData(){
+      getData().then(res=>{
+        this.$set(this, 'activities', _.get(res, 'data.data'))
+      })
     }
   },
   mounted() {
     // NOTE: 请求获取列表
-    getData().then(res=>{
-      this.$set(this, 'activities', _.get(res, 'data.data'))
-    })
+    this.getData();
   }
 };
 </script>

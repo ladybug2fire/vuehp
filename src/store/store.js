@@ -9,8 +9,8 @@ export default new Vuex.Store({
   state:function () {
     return {
       select:0,
-      schemes: [],//[{"name":"杭州","id":"GQzWA4iqo"},{"name":"上海","id":"Z8idMS6y2"}],
-      treeData:[],// [{"id":"9Am94BjpJ","name":"旅游","level":1,"child":[{"id":"Bz749WrQN","name":"饮食","level":2,"child":[]},{"id":"_PKbWECha","name":"交通","level":2,"child":[{"id":"eB_NwY706","name":"国道","level":3,"child":[]},{"id":"7fB44Mhq8","name":"高速","level":3,"child":[]}]},{"id":"bJsMH3wo1","name":"费用","level":2,"child":[]}]}],
+      schemes: [],
+      treeData:[],
       matrixs:{},
       calResult: {},
       WD: [],//方案评估矩阵
@@ -80,6 +80,7 @@ export default new Vuex.Store({
     },
     setCalResult(state, payload){
       state.calResult[payload.key] = payload.value
+      state.calResult = _.assign({}, state.calResult)
     },
     setMatrix(state,payload){
       // NOTE: 对应每个表的计算过程中修改表中值。整个表格数据替换才能触发Vue页面更新
@@ -112,6 +113,6 @@ export default new Vuex.Store({
     },
     calResult(state){
       return state.calResult;
-    }
+    },
   },
 })
